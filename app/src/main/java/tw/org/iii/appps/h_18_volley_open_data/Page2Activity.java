@@ -39,7 +39,7 @@ public class Page2Activity extends AppCompatActivity {
                         Log.v("brad",response);
                     }
                 },null
-        ){  //這邊要Overrrider取得參數方法
+        ){  //這邊要Overrrider取得參數方法,把參數傳遞過去方法
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String>  params = new HashMap<>();

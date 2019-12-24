@@ -1,6 +1,7 @@
 package tw.org.iii.appps.h_18_volley_open_data;
 //缺點:1.必須包在執行緒 //2.可能要透過handler
 //目的:android Volley :是一個HTtp的 可以讓我們的網路在網頁可以執行非常快,執行緒跟ui一次就處理掉
+//泛型的東西一定要是物件,byte是基本型別但加上陣列就變物件
 
 //1.先在檔案管理加入int網路權限,跟明碼傳送
 //2.build.gradle=>Module,加上 implementation 'com.android.volley:volley:1.1.1'
@@ -10,6 +11,8 @@ package tw.org.iii.appps.h_18_volley_open_data;
 //因為頁面頁面之間的傳遞,用這招省去傳參數,比較方便
 //3-3.設置on Creat在創建時, 取得Reqquer物件queue = Volley.newRequestQueue(this);//從Volley物件取得RequestQueue(回傳到RequestQueue)
 //3-4.回到主程式從applictaion宣告呼叫來玩
+
+
 
 //最大寬度,如果不指定就0,0
 //Bitmap.Config.ARGB_8888,//影像要如何做組態解碼
@@ -23,6 +26,7 @@ package tw.org.iii.appps.h_18_volley_open_data;
 //            Listener<String> listener,//3.傳呼回來的Rseponse回應監聽者
 //            @Nullable ErrorListener errorListener)//4.這邊回傳犯行設定的String訊息
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -40,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -251,6 +256,30 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,Page2Activity.class);
         startActivity(intent);
 
+    }
+
+    //9自訂泛型byte陣列的方法
+    //1.宣告繼承Request<byte[]> :想要資料結構是byte,byte是基本型別加上陣列後便物件,才能在網路傳遞
+    //2.建構式最重要的參數是Response,所以加上這個參數
+    public class MyInputStreamRequest extends Request<byte[]>{
+        private final  Response.Listener<byte[]> listen;
+        public MyInputStreamRequest(int method,
+                                    String url,
+                                    Response.Listener<byte[]> listen, //自己加的Res.linten,byte[]泛型
+                                    @Nullable Response.ErrorListener listener) {
+            super(method, url, listener);
+            this.listen = listen;
+        }
+
+        @Override
+        protected Response<byte[]> parseNetworkResponse(NetworkResponse response) {
+            return null;
+        }
+
+        @Override
+        protected void deliverResponse(byte[] response) {
+
+        }
     }
 }
 
